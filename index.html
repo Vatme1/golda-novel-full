@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Битва за Колю 2: Новая Голда</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #0d0f18;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Стартовый экран (маскировка под новеллу) */
+    #start-screen {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, #1a2236 0%, #0a0d14 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 24px;
+      border-radius: 14px;
+      text-align: center;
+      width: 85%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      color: #fff;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #fbbf24;
+      color: #0f172a;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      color: #f8fafc;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      margin-bottom: 14px;
+    }
+
+    input:focus {
+      border-color: #fbbf24;
+    }
+
+    button {
+      width: 100%;
+      padding: 11px;
+      background: #fbbf24;
+      border: none;
+      color: #0f172a;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    button:active {
+      transform: scale(0.98);
+      background: #f59e0b;
+    }
+
+    /* Экран пранка */
+    #prank-screen {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    #prank-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: shake 0.08s infinite;
+    }
+
+    /* Дикая тряска экрана */
+    @keyframes shake {
+      0% { transform: translate(3px, 4px) rotate(0deg); }
+      20% { transform: translate(-4px, -3px) rotate(1.5deg); }
+      40% { transform: translate(4px, 2px) rotate(-1.5deg); }
+      60% { transform: translate(-2px, 3px) rotate(0deg); }
+      80% { transform: translate(3px, -4px) rotate(1.5deg); }
+      100% { transform: translate(-3px, 3px) rotate(-1.5deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Меню ввода имени -->
+  <div id="start-screen">
+    <div class="card">
+      <span class="tag">DLC: Акт 2</span>
+      <h2>Битва за Колю: Эпилог</h2>
+      <p>События на следующее утро после остановки. Подтверди своё имя для загрузки сохранения:</p>
+      <input type="text" id="name-input" placeholder="Введи имя..." maxlength="15" autocomplete="off">
+      <button id="go-btn">Загрузить главу 2</button>
+    </div>
+  </div>
+
+  <!-- Экран скримера -->
+  <div id="prank-screen">
+    <img src="screamer.png" alt="Сюрприз!">
+  </div>
+
+  <!-- Аудиодорожка с атрибутом loop -->
+  <audio id="prank-audio" src="scream.mp3" preload="auto" loop></audio>
+
+  <script>
+    const goBtn = document.getElementById('go-btn');
+    const startScreen = document.getElementById('start-screen');
+    const prankScreen = document.getElementById('prank-screen');
+    const audio = document.getElementById('prank-audio');
+
+    goBtn.addEventListener('click', () => {
+      // Пытаемся развернуть во весь экран
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+
+      // Прячем меню ввода
+      startScreen.style.display = 'none';
+
+      // Показываем скример
+      prankScreen.style.display = 'flex';
+
+      // Врубаем звук на бесконечный повтор
+      audio.loop = true;
+      audio.volume = 1.0;
+      audio.currentTime = 0;
+      audio.play().catch(err => {
+        console.error("Ошибка воспроизведения звука:", err);
+      });
+    });
+  </script>
+</body>
+</html>
